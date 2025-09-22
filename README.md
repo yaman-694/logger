@@ -1,4 +1,4 @@
-# @zyan/logger
+# omnilogs
 
 [![npm version](https://badge.fury.io/js/%40zyan%2Flogger.svg)](https://badge.fury.io/js/%40zyan%2Flogger)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -6,36 +6,42 @@
 
 A comprehensive, production-ready logging solution for Node.js applications. Built on top of Winston, this logger provides multiple transport options including console, Loki, and Telegram with customizable formatting and log levels.
 
-## ✨ Features
 
-- 🚀 **Easy Setup** - Simple plug-and-play configuration
-- 🎨 **Multiple Formats** - Detailed, compact, and JSON formatting options
-- 📡 **Multiple Transports** - Console, Loki (Grafana), and Telegram support
-- 🔧 **Highly Configurable** - Customize log levels, colors, and date formats
-- 🎯 **TypeScript Support** - Full TypeScript definitions included
-- ⚡ **Performance Optimized** - Built on Winston for production use
-- 🎨 **Colored Output** - Beautiful colored console logs
-- 📊 **Structured Logging** - JSON and structured metadata support
-- 🛡️ **Error Handling** - Built-in exception and rejection handlers
+## Repository
 
-## 📦 Installation
+More Info [https://github.com/yaman-694/omnilogs](https://github.com/yaman-694/omnilogs)
+
+
+## Features
+
+- **Easy Setup** - Simple plug-and-play configuration
+- **Multiple Formats** - Detailed, compact, and JSON formatting options
+- **Multiple Transports** - Console, Loki (Grafana), and Telegram support
+- **Highly Configurable** - Customize log levels, colors, and date formats
+- **TypeScript Support** - Full TypeScript definitions included
+- **Performance Optimized** - Built on Winston for production use
+- **Colored Output** - Beautiful colored console logs
+- **Structured Logging** - JSON and structured metadata support
+- **Error Handling** - Built-in exception and rejection handlers
+
+## Installation
 
 ```bash
-npm install @zyan/logger
+npm install omnilogs
 ```
 
 ```bash
-yarn add @zyan/logger
+yarn add omnilogs
 ```
 
 ```bash
-pnpm add @zyan/logger
+pnpm add omnilogs
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ```typescript
-import { createLogger } from '@zyan/logger'
+import { createLogger } from 'omnilogs'
 
 const logger = createLogger({
   serviceName: 'my-server',
@@ -52,7 +58,7 @@ logger.error('Something went wrong', { userId: 123, action: 'login' })
 logger.success('User authenticated successfully')
 ```
 
-## 📚 API Reference
+## API Reference
 
 ### `createLogger(options: LoggerOptions)`
 
@@ -117,7 +123,7 @@ interface LoggerOptions {
 }
 ```
 
-## 🚀 Transport Configuration
+## Transport Configuration
 
 ### Console Transport
 
@@ -137,7 +143,7 @@ interface ConsoleTransportOptions {
 
 ```
 2025-09-23 10:30:45 info [MY-SERVER] → User login successful
-   📊 Metadata: userId: 123 | ip: 192.168.1.1
+   Metadata: userId: 123 | ip: 192.168.1.1
 ```
 
 ##### `compact`
@@ -243,12 +249,12 @@ const logger = createLogger({
 })
 ```
 
-## 📋 Usage Examples
+## Usage Examples
 
 ### Basic Console Logging
 
 ```typescript
-import { createLogger } from '@zyan/logger'
+import { createLogger } from 'omnilogs'
 
 const logger = createLogger({
   serviceName: 'my-app',
@@ -307,7 +313,7 @@ const logger = createLogger({
 import { format } from 'winston'
 
 const customFormat = format.printf(({ timestamp, level, message, service }) => {
-  return `🔸 ${timestamp} | ${level.toUpperCase()} | ${service} | ${message}`
+  return `${timestamp} | ${level.toUpperCase()} | ${service} | ${message}`
 })
 
 const logger = createLogger({
@@ -349,7 +355,7 @@ process.on('unhandledRejection', (reason) => {
 })
 ```
 
-## 🎨 Log Levels
+## Log Levels
 
 The logger supports 6 log levels with corresponding colors:
 
@@ -362,7 +368,7 @@ The logger supports 6 log levels with corresponding colors:
 | `info` | 4 | Cyan | General information, normal operations |
 | `debug` | 5 | Gray | Detailed debugging information |
 
-## 🛠️ Environment Variables
+## Environment Variables
 
 For sensitive configuration like Telegram tokens, use environment variables:
 
@@ -394,7 +400,7 @@ const logger = createLogger({
 })
 ```
 
-## 🏗️ Development Setup
+## Development Setup
 
 ```bash
 # Clone the repository
@@ -416,7 +422,7 @@ npm test
 npm run dev
 ```
 
-## 📄 TypeScript Support
+## TypeScript Support
 
 The package includes full TypeScript definitions. All interfaces and types are exported for your convenience:
 
@@ -426,7 +432,7 @@ import {
   type LoggerOptions,
   type LokiTransportOptions,
   type TelegramTransportOptions 
-} from '@zyan/logger'
+} from 'omnilogs'
 
 // Full type safety
 const config: LoggerOptions = {
@@ -440,7 +446,7 @@ const config: LoggerOptions = {
 const logger = createLogger(config)
 ```
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
@@ -450,24 +456,24 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Built on top of [Winston](https://github.com/winstonjs/winston)
 - Loki transport powered by [winston-loki](https://github.com/JaniAnttonen/winston-loki)
 - Telegram transport powered by [winston-telegram](https://github.com/ivanmarban/winston-telegram)
 
-## 📞 Support
+## Support
 
-- 🐛 [Bug Reports](https://github.com/yaman-694/logger/issues)
-- 💡 [Feature Requests](https://github.com/yaman-694/logger/issues)
-- 📧 [Email Support](mailto:yamanjain694@gmail.com)
-- 📖 [Documentation](https://github.com/yaman-694/logger#readme)
+- [Bug Reports](https://github.com/yaman-694/logger/issues)
+- [Feature Requests](https://github.com/yaman-694/logger/issues)
+- [Email Support](mailto:yamanjain694@gmail.com)
+- [Documentation](https://github.com/yaman-694/logger#readme)
 
-## 🗺️ Roadmap
+## Roadmap
 
 - [ ] File transport support
 - [ ] Database transport options
@@ -479,4 +485,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Made with ❤️ by [Yaman Jain](https://github.com/yaman-694)
+Made with by [Yaman Jain](https://github.com/yaman-694)

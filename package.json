@@ -19,7 +19,7 @@
     "check-types": "tsc --noEmit",
     "install-global": "npm run build && npm install -g .",
     "pub": "npm run build && npm publish",
-    "uninstall-global": "npm uninstall -g @zyan/logger"
+    "uninstall-global": "npm uninstall -g omnilogs"
   },
   "keywords": [
     "developers",
