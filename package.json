@@ -1,5 +1,5 @@
 {
-  "name": "zenlog",
+  "name": "omnilogs",
   "version": "1.0.0",
   "description": "A simple plug and play logger for your nodejs projects.",
   "type": "module",
@@ -46,11 +46,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yaman-694/zenlog.git",
+    "url": "https://github.com/yaman-694/omnilogs.git",
     "directory": "."
   },
   "bugs": {
-    "url": "https://github.com/yaman-694/zenlog/issues"
+    "url": "https://github.com/yaman-694/omnilogs/issues"
   },
   "publishConfig": {
     "access": "public"
