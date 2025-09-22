@@ -24,8 +24,11 @@
     "developers",
     "logger",
     "nodejs",
-    "typescript",
-    "javascript"
+    "winston",
+    "loki",
+    "telegram",
+    "logging",
+    "grafana"
   ],
   "author": {
     "name": "Yaman Jain",
