@@ -23,6 +23,7 @@ export interface LokiTransportOptions
   useWinstonMetaAsLabels?: boolean;
   ignoredMeta?: Array<string>;
   onConnectionError?(error: unknown): void;
+  format: Format;
 }
 
 export interface TelegramTransportOptions {

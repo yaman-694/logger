@@ -1,3 +1,4 @@
+import type { Format } from 'logform'
 import { format, transports } from 'winston'
 import LokiTransport from 'winston-loki'
 import TelegramTransport from 'winston-telegram'
@@ -5,9 +6,8 @@ import type {
   LokiTransportOptions,
   TelegramTransportOptions
 } from '../interface/interfaces.js'
-import type { Format } from 'logform'
-import { formatter } from './Formatter.js'
 import type { formatType } from '../interface/type.js'
+import { formatter } from './Formatter.js'
 
 const { combine, timestamp, prettyPrint, errors } = format
 
@@ -31,8 +31,10 @@ class Transporter {
   lokiTransporter(opts: LokiTransportOptions) {
     return new LokiTransport({
       labels: { service_name: this.serviceName },
-      format: combine(timestamp({ format: this.dateFormat }), prettyPrint()),
-      ...opts
+      ...opts,
+      format:
+        opts.format ||
+        combine(timestamp({ format: this.dateFormat }), prettyPrint())
     })
   }
 
@@ -56,20 +58,18 @@ class Transporter {
     switch (type) {
       case 'detailed':
         consoleFormat = formatter.detailedLogFormat
-        break;
-      case "json":
+        break
+      case 'json':
         consoleFormat = formatter.jsonLogFormat
-        break;
-      case "compact":
+        break
+      case 'compact':
         consoleFormat = formatter.compactLogFormat
-        break;
+        break
     }
 
     return new transports.Console({
       format: combine(
-        format.colorize({
-          all: true
-        }),
+        ...(type !== 'json' ? [format.colorize({ all: true })] : []),
         timestamp({ format: this.dateFormat }),
         customFormat ? customFormat : consoleFormat,
         errors({

@@ -4,8 +4,13 @@
   "description": "A simple plug and play logger for your nodejs projects.",
   "type": "module",
   "main": "dist/index.js",
-  "bin": {
-    "logger": "./dist/index.js"
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
   },
   "scripts": {
     "build": "tsc && chmod +x dist/index.js",
@@ -13,7 +18,7 @@
     "check-types": "tsc --noEmit",
     "install-global": "npm run build && npm install -g .",
     "pub": "npm run build && npm publish",
-    "uninstall-global": "npm uninstall -g curlme"
+    "uninstall-global": "npm uninstall -g @zyan/logger"
   },
   "keywords": [
     "developers",
@@ -38,7 +43,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/yaman-694/logger.git",
-    "directory": "apps/cli"
+    "directory": "."
   },
   "bugs": {
     "url": "https://github.com/yaman-694/logger/issues"
