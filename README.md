@@ -1,8 +1,7 @@
 # omnilogs
 
-[![npm version](https://badge.fury.io/js/%40zyan%2Flogger.svg)](https://badge.fury.io/js/%40zyan%2Flogger)
+[![npm version](https://badge.fury.io/js/%40zyan%2Flogger.svg)](https://www.npmjs.com/package/omnilogs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js CI](https://github.com/yaman-694/logger/workflows/Node.js%20CI/badge.svg)](https://github.com/yaman-694/logger/actions)
 
 A comprehensive, production-ready logging solution for Node.js applications. Built on top of Winston, this logger provides multiple transport options including console, Loki, and Telegram with customizable formatting and log levels.
 
@@ -10,7 +9,6 @@ A comprehensive, production-ready logging solution for Node.js applications. Bui
 ## Repository
 
 More Info [https://github.com/yaman-694/omnilogs](https://github.com/yaman-694/omnilogs)
-
 
 ## Features
 
