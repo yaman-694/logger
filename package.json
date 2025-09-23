@@ -1,6 +1,6 @@
 {
   "name": "omnilogs",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple plug and play logger for your nodejs projects.",
   "type": "module",
   "main": "./dist/index.cjs",
