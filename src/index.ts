@@ -1,9 +1,11 @@
 import winston, { createLogger as createWinstonLogger } from 'winston'
 import Transporter from './configurations/Transporter.js'
 import { levelColor } from './constants/index.js'
-import type { LoggerOptions } from './interface/interfaces.js'
-
-winston.addColors(levelColor.colors)
+import type {
+  FlexibleLogger,
+  LoggerOptions,
+  LoggerWithLevels
+} from './interface/interfaces.js'
 
 const createLogger = ({
   serviceName,
@@ -11,9 +13,9 @@ const createLogger = ({
   transports,
   dateFormat,
   colorLevels
-}: LoggerOptions) => {
+}: LoggerOptions): FlexibleLogger => {
   const loggerConfig: winston.LoggerOptions = {
-    levels: colorLevels || levelColor.levels,
+    levels: colorLevels?.levels || levelColor.levels,
     level: level || 'info',
     defaultMeta: { service: serviceName }
   }
@@ -43,7 +45,21 @@ const createLogger = ({
   loggerConfig.exceptionHandlers = transporters
   loggerConfig.rejectionHandlers = transporters
 
-  return createWinstonLogger(loggerConfig)
+  winston.addColors(colorLevels?.colors || levelColor.colors)
+
+  return createWinstonLogger(loggerConfig) as FlexibleLogger
 }
 
+export type {
+  CustomLogger,
+  FlexibleLogger,
+  LoggerWithLevels
+} from './interface/interfaces.js'
 export { createLogger }
+
+// Helper function for creating loggers with strongly typed custom levels
+export function createTypedLogger<T extends Record<string, number>>(
+  options: LoggerOptions
+): LoggerWithLevels<T> {
+  return createLogger(options) as unknown as LoggerWithLevels<T>
+}

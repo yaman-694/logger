@@ -19,7 +19,9 @@
     "check-types": "tsc --noEmit",
     "install-global": "npm run build && npm install -g .",
     "pub": "npm run build && npm publish",
-    "uninstall-global": "npm uninstall -g omnilogs"
+    "uninstall-global": "npm uninstall -g omnilogs",
+    "test": "npm run test:custom-levels",
+    "test:custom-levels": "tsx src/test/custom-levels-test.ts"
   },
   "keywords": [
     "developers",

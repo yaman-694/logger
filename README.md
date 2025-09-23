@@ -355,7 +355,7 @@ process.on('unhandledRejection', (reason) => {
 
 ## Log Levels
 
-The logger supports 6 log levels with corresponding colors:
+The logger supports 6 default log levels with corresponding colors:
 
 | Level | Priority | Color | Description |
 |-------|----------|-------|-------------|
@@ -365,6 +365,101 @@ The logger supports 6 log levels with corresponding colors:
 | `success` | 3 | Green | Successful operations, positive outcomes |
 | `info` | 4 | Cyan | General information, normal operations |
 | `debug` | 5 | Gray | Detailed debugging information |
+
+### Custom Log Levels
+
+You can define your own custom log levels with TypeScript support:
+
+```typescript
+import { createLogger, createTypedLogger } from 'omnilogs'
+
+// Option 1: Using createLogger (flexible typing)
+const logger = createLogger({
+  serviceName: 'custom-service',
+  transports: {
+    console: { type: 'detailed' }
+  },
+  colorLevels: {
+    levels: {
+      emergency: 0,
+      alert: 1,
+      critical: 2,
+      error: 3,
+      warning: 4,
+      notice: 5,
+      info: 6,
+      debug: 7
+    },
+    colors: {
+      emergency: 'red',
+      alert: 'magenta',
+      critical: 'red',
+      error: 'red',
+      warning: 'yellow',
+      notice: 'blue',
+      info: 'green',
+      debug: 'gray'
+    }
+  }
+})
+
+// These methods will be available with TypeScript intellisense
+logger.emergency('System emergency!')
+logger.alert('High priority alert')
+logger.notice('General notice')
+
+// Option 2: Using createTypedLogger (strict typing)
+type MyCustomLevels = {
+  fatal: number
+  error: number
+  warn: number
+  info: number
+  verbose: number
+}
+
+const strictLogger = createTypedLogger<MyCustomLevels>({
+  serviceName: 'strict-service',
+  transports: {
+    console: { type: 'detailed' }
+  },
+  colorLevels: {
+    levels: {
+      fatal: 0,
+      error: 1,
+      warn: 2,
+      info: 3,
+      verbose: 4
+    },
+    colors: {
+      fatal: 'red',
+      error: 'red',
+      warn: 'yellow',
+      info: 'green',
+      verbose: 'gray'
+    }
+  }
+})
+
+// Strongly typed methods with full intellisense
+strictLogger.fatal('Fatal error occurred')
+strictLogger.verbose('Detailed verbose information')
+```
+
+#### Type Exports for Custom Levels
+
+```typescript
+import { 
+  createLogger, 
+  createTypedLogger,
+  type LoggerWithLevels,
+  type FlexibleLogger,
+  type CustomLogger 
+} from 'omnilogs'
+
+// LoggerWithLevels<T> - For strict typing with custom levels
+// FlexibleLogger - Accepts any string as log method
+// CustomLogger - Default logger with standard levels
+```
 
 ## Environment Variables
 

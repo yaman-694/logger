@@ -1,4 +1,6 @@
-const levelColor = {
+import { ColorLevels } from "../interface/interfaces"
+
+const levelColor: ColorLevels = {
   levels: {
     critical: 0,
     error: 1,
