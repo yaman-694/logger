@@ -2,9 +2,9 @@ name: Build and Test
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, dev ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, dev ]
 
 jobs:
   build:
@@ -41,31 +41,6 @@ jobs:
           test -f dist/index.js
           test -f dist/index.cjs
           test -f dist/index.d.ts
-
-  build-server:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./server
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-
-      - name: Install dependencies
-        run: bun install
-
-      - name: Type check (if applicable)
-        run: |
-          if [ -f "tsconfig.json" ]; then
-            bun run tsc --noEmit
-          fi
-        continue-on-error: true
 
   lint:
     runs-on: ubuntu-latest
