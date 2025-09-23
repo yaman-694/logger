@@ -1,7 +1,6 @@
 # omnilogs
 
 [![npm version](https://badge.fury.io/js/omnilogs.svg)](https://www.npmjs.com/package/omnilogs)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A comprehensive, production-ready logging solution for Node.js applications. Built on top of Winston, this logger provides multiple transport options including console, Loki, and Telegram with customizable formatting and log levels.
 
