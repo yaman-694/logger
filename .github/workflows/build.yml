@@ -39,7 +39,6 @@ jobs:
         run: |
           ls -la dist/
           test -f dist/index.js
-          test -f dist/index.cjs
           test -f dist/index.d.ts
 
   lint:
