@@ -6,7 +6,7 @@ const logger = createLogger({
 		fileRotate: {
 			maxSize: '20m',
 			maxFiles: '1d',
-			level: 'info',
+			level: 'info'
 		}
 	}
 })

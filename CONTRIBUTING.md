@@ -12,17 +12,20 @@ Thank you for your interest in contributing to omnilogs! This is an open source 
 ### Development Setup
 
 1. **Fork and Clone**
+
    ```bash
    git clone https://github.com/your-username/omnilogs.git
    cd omnilogs/package
    ```
 
 2. **Install Dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Development Commands**
+
    ```bash
    # Build the project
    npm run build
@@ -55,6 +58,7 @@ Thank you for your interest in contributing to omnilogs! This is an open source 
 ### Pull Requests
 
 1. **Fork the repository** and create a feature branch
+
    ```bash
    git checkout -b feature/your-feature-name
    ```
@@ -62,12 +66,14 @@ Thank you for your interest in contributing to omnilogs! This is an open source 
 2. **Make your changes** following our coding standards
 
 3. **Test your changes** thoroughly
+
    ```bash
    npm run build
    npm run check-types
    ```
 
 4. **Commit your changes** with a descriptive message
+
    ```bash
    git commit -m "Add: new transport option for Discord webhooks"
    ```

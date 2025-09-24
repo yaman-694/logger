@@ -70,9 +70,7 @@ class Transporter {
 	}
 
 	fileRotateTransporter(opts: FileTransport) {
-		let fileRotateFormat = formatter.getFormatType(
-			opts.formatType || 'json'
-		)
+		let fileRotateFormat = formatter.getFormatType(opts.formatType || 'json')
 
 		const options: any = {
 			datePattern: this.dateFormat,
