@@ -1,4 +1,6 @@
 import { format } from 'winston'
+import { formatType } from '../interface/type'
+import type { Format } from 'logform'
 
 const { printf } = format
 
@@ -44,6 +46,17 @@ class Formatter {
     // Color timestamp gray while keeping other elements with their winston colors
     return `${this.colors.gray}${timestamp}${this.colors.reset} ${level} ${serviceTag} → ${message}`
   })
+
+	getFormatType(formatType: formatType): Format {
+		switch (formatType) {
+			case 'detailed':
+				return this.detailedLogFormat
+			case 'json':
+				return this.jsonLogFormat
+			case 'compact':
+				return this.compactLogFormat
+		}
+	}
 }
 
 export const formatter = new Formatter()

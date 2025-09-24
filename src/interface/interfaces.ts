@@ -2,13 +2,15 @@ import http from 'http'
 import https from 'https'
 import type { Format } from 'logform'
 import { Logger as WinstonLogger } from 'winston'
+import DailyRotateFile, { GeneralDailyRotateFileTransportOptions } from 'winston-daily-rotate-file'
 import type WinstonTelegram from 'winston-telegram'
 import TransportStream from 'winston-transport'
 import {
-  AbstractConfigSetColors,
-  AbstractConfigSetLevels
+	AbstractConfigSetColors,
+	AbstractConfigSetLevels
 } from 'winston/lib/winston/config/index.js'
 import type { formatType } from './type.js'
+
 export interface LokiTransportOptions
   extends TransportStream.TransportStreamOptions {
   host: string
@@ -72,6 +74,7 @@ export interface LoggerOptions {
       type?: formatType
       customFormat?: Format
     }
+    fileRotate?: FileTransport
   }
   colorLevels?: ColorLevels
 }
@@ -100,3 +103,8 @@ export type CustomLogger = LoggerWithLevels<{
 // More flexible logger type that accepts any string keys as log methods
 export type FlexibleLogger = WinstonLogger &
   Record<string, WinstonLogger['info']>
+
+export type FileTransport = Omit<GeneralDailyRotateFileTransportOptions, 'filename'> & {
+	customFormat?: Format
+	formatType?: formatType
+}
