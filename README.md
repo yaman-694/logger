@@ -4,7 +4,6 @@
 
 A comprehensive, production-ready logging solution for Node.js applications. Built on top of Winston, this logger provides multiple transport options including console, Loki, and Telegram with customizable formatting and log levels.
 
-
 ## Repository
 
 More Info [https://github.com/yaman-694/omnilogs](https://github.com/yaman-694/omnilogs)
@@ -41,13 +40,13 @@ pnpm add omnilogs
 import { createLogger } from 'omnilogs'
 
 const logger = createLogger({
-  serviceName: 'my-server',
-  level: 'info',
-  transports: {
-    console: {
-      type: 'detailed'
-    }
-  }
+	serviceName: 'my-server',
+	level: 'info',
+	transports: {
+		console: {
+			type: 'detailed'
+		}
+	}
 })
 
 logger.info('Hello World!')
@@ -65,40 +64,45 @@ Creates a new logger instance with the specified configuration.
 
 ```typescript
 interface LoggerOptions {
-  serviceName: string
-  level?: string
-  dateFormat?: string
-  transports?: {
-    loki?: LokiTransportOptions
-    telegram?: TelegramTransportOptions
-    console?: ConsoleTransportOptions
-  }
-  colorLevels?: CustomLevels
+	serviceName: string
+	level?: string
+	dateFormat?: string
+	transports?: {
+		loki?: LokiTransportOptions
+		telegram?: TelegramTransportOptions
+		console?: ConsoleTransportOptions
+	}
+	colorLevels?: CustomLevels
 }
 ```
 
 ### Configuration Options
 
 #### `serviceName` (required)
+
 - **Type**: `string`
 - **Description**: Name of your service/application
 - **Example**: `'my-api-server'`
 
 #### `level` (optional)
+
 - **Type**: `string`
 - **Default**: `'info'`
 - **Options**: `'critical'`, `'error'`, `'warn'`, `'success'`, `'info'`, `'debug'`
 - **Description**: Minimum log level to output
 
 #### `dateFormat` (optional)
+
 - **Type**: `string`
 - **Default**: `'YYYY-MM-DD HH:mm:ss'`
 - **Description**: Custom date format for timestamps
 
 #### `colorLevels` (optional)
+
 - **Type**: `object`
 - **Description**: Custom log levels configuration
 - **Default**:
+
 ```typescript
 {
   levels: {
@@ -122,18 +126,73 @@ interface LoggerOptions {
 
 ## Transport Configuration
 
+### File Transport (Daily Rotate)
+
+```typescript
+interface FileTransport {
+	maxSize?: string | number // Maximum size of a log file before rotation (e.g., '20m')
+	maxFiles?: string | number // Maximum number of files or days to keep (e.g., '14d')
+	level?: string // Minimum log level to write to file (default: 'info')
+	customFormat?: Format // Optional custom winston format
+	formatType?: 'detailed' | 'json' | 'compact' // Output format type (default: 'detailed')
+}
+```
+
+#### File Transport Features
+
+- **Automatic log rotation**: Rotates log files based on size or date
+- **Customizable retention**: Keep logs for a set number of days or files
+- **Multiple formats**: Supports detailed, compact, and JSON log formats
+- **Production ready**: Uses [winston-daily-rotate-file](https://github.com/winstonjs/winston-daily-rotate-file)
+
+#### Example Configuration
+
+```typescript
+import { createLogger } from 'omnilogs'
+
+const logger = createLogger({
+	serviceName: 'default-service',
+	transports: {
+		fileRotate: {
+			maxSize: '20m',
+			maxFiles: '1d',
+			level: 'info'
+			// formatType: 'json', // optional: 'detailed' | 'compact' | 'json'
+			// customFormat: myCustomFormat // optional: winston format
+		}
+	}
+})
+
+logger.error('This is an error message', { errorCode: 123, user: 'john_doe' })
+logger.info('This is an info message')
+logger.debug('This is a debug message')
+logger.warn('This is a warning message')
+logger.critical('This is a critical message')
+logger.success('This is a success message')
+```
+
+#### File Output Example
+
+```
+2025-09-24 18:18:09 info [DEFAULT-SERVICE] → This is an info message
+2025-09-24 18:18:09 error [DEFAULT-SERVICE] → This is an error message | errorCode: 123 | user: john_doe
+```
+
+---
+
 ### Console Transport
 
 ```typescript
 interface ConsoleTransportOptions {
-  type?: 'detailed' | 'json' | 'compact'
-  customFormat?: Format
+	type?: 'detailed' | 'json' | 'compact'
+	customFormat?: Format
 }
 ```
 
 #### Console Format Types
 
 ##### `detailed` (default)
+
 - Includes timestamp, log level, service name, message, and metadata
 - Color-coded output with icons
 - Structured metadata display
@@ -144,6 +203,7 @@ interface ConsoleTransportOptions {
 ```
 
 ##### `compact`
+
 - Minimal output with essential information only
 - Perfect for development environments
 
@@ -152,52 +212,60 @@ interface ConsoleTransportOptions {
 ```
 
 ##### `json`
+
 - Machine-readable JSON format
 - Ideal for log aggregation systems
 
 ```json
-{"level":"info","message":"User login successful","timestamp":"2025-09-23 10:30:45","service":"my-server"}
+{
+	"level": "info",
+	"message": "User login successful",
+	"timestamp": "2025-09-23 10:30:45",
+	"service": "my-server"
+}
 ```
 
 ### Loki Transport (Grafana)
 
 ```typescript
 interface LokiTransportOptions {
-  host: string
-  basicAuth?: string
-  headers?: object
-  interval?: number
-  json?: boolean
-  batching?: boolean
-  labels?: object
-  clearOnError?: boolean
-  replaceTimestamp?: boolean
-  gracefulShutdown?: boolean
-  timeout?: number
-  useWinstonMetaAsLabels?: boolean
-  ignoredMeta?: Array<string>
-  format?: Format
+	host: string
+	basicAuth?: string
+	headers?: object
+	interval?: number
+	json?: boolean
+	batching?: boolean
+	labels?: object
+	clearOnError?: boolean
+	replaceTimestamp?: boolean
+	gracefulShutdown?: boolean
+	timeout?: number
+	useWinstonMetaAsLabels?: boolean
+	ignoredMeta?: Array<string>
+	format?: Format
 }
 ```
 
 #### Required Options
+
 - **`host`**: Loki server URL (e.g., `'http://localhost:3100'`)
 
 #### Example Configuration
+
 ```typescript
 const logger = createLogger({
-  serviceName: 'my-api',
-  transports: {
-    loki: {
-      host: 'http://localhost:3100',
-      labels: { 
-        environment: 'production',
-        version: '1.0.0'
-      },
-      batching: true,
-      interval: 5000
-    }
-  }
+	serviceName: 'my-api',
+	transports: {
+		loki: {
+			host: 'http://localhost:3100',
+			labels: {
+				environment: 'production',
+				version: '1.0.0'
+			},
+			batching: true,
+			interval: 5000
+		}
+	}
 })
 ```
 
@@ -205,44 +273,46 @@ const logger = createLogger({
 
 ```typescript
 interface TelegramTransportOptions {
-  botToken: string
-  chatId: number
-  opts?: {
-    messageThreadId?: number
-    parseMode?: string
-    level?: string
-    unique?: boolean
-    silent?: boolean
-    disableNotification?: boolean
-    name?: string
-    template?: string
-    formatMessage?: (params: any, info: any) => string
-    handleExceptions?: boolean
-    batchingDelay?: number
-    batchingSeparator?: string
-  }
+	botToken: string
+	chatId: number
+	opts?: {
+		messageThreadId?: number
+		parseMode?: string
+		level?: string
+		unique?: boolean
+		silent?: boolean
+		disableNotification?: boolean
+		name?: string
+		template?: string
+		formatMessage?: (params: any, info: any) => string
+		handleExceptions?: boolean
+		batchingDelay?: number
+		batchingSeparator?: string
+	}
 }
 ```
 
 #### Required Options
+
 - **`botToken`**: Telegram bot token from BotFather
 - **`chatId`**: Telegram chat ID to send messages to
 
 #### Example Configuration
+
 ```typescript
 const logger = createLogger({
-  serviceName: 'critical-service',
-  transports: {
-    telegram: {
-      botToken: 'YOUR_BOT_TOKEN',
-      chatId: -1001234567890,
-      opts: {
-        level: 'error', // Only send error and above
-        disableNotification: false,
-        parseMode: 'Markdown'
-      }
-    }
-  }
+	serviceName: 'critical-service',
+	transports: {
+		telegram: {
+			botToken: 'YOUR_BOT_TOKEN',
+			chatId: -1001234567890,
+			opts: {
+				level: 'error', // Only send error and above
+				disableNotification: false,
+				parseMode: 'Markdown'
+			}
+		}
+	}
 })
 ```
 
@@ -254,20 +324,23 @@ const logger = createLogger({
 import { createLogger } from 'omnilogs'
 
 const logger = createLogger({
-  serviceName: 'my-app',
-  level: 'debug',
-  transports: {
-    console: {
-      type: 'detailed'
-    }
-  }
+	serviceName: 'my-app',
+	level: 'debug',
+	transports: {
+		console: {
+			type: 'detailed'
+		}
+	}
 })
 
 // Different log levels
 logger.critical('System is down!')
 logger.error('Database connection failed', { error: 'ECONNREFUSED' })
 logger.warn('High memory usage detected', { usage: '85%' })
-logger.success('Payment processed successfully', { amount: 100, currency: 'USD' })
+logger.success('Payment processed successfully', {
+	amount: 100,
+	currency: 'USD'
+})
 logger.info('User logged in', { userId: 123 })
 logger.debug('Cache hit', { key: 'user:123', ttl: 300 })
 ```
@@ -276,31 +349,31 @@ logger.debug('Cache hit', { key: 'user:123', ttl: 300 })
 
 ```typescript
 const logger = createLogger({
-  serviceName: 'production-api',
-  level: 'info',
-  dateFormat: 'DD/MM/YYYY HH:mm:ss',
-  transports: {
-    console: {
-      type: 'compact'
-    },
-    loki: {
-      host: 'https://loki.company.com',
-      basicAuth: 'username:password',
-      labels: {
-        environment: 'production',
-        service: 'api-gateway'
-      }
-    },
-    telegram: {
-      botToken: process.env.TELEGRAM_BOT_TOKEN!,
-      chatId: parseInt(process.env.TELEGRAM_CHAT_ID!),
-      opts: {
-        level: 'error',
-        template: '[{level}] {service}: {message}',
-        disableNotification: true
-      }
-    }
-  }
+	serviceName: 'production-api',
+	level: 'info',
+	dateFormat: 'DD/MM/YYYY HH:mm:ss',
+	transports: {
+		console: {
+			type: 'compact'
+		},
+		loki: {
+			host: 'https://loki.company.com',
+			basicAuth: 'username:password',
+			labels: {
+				environment: 'production',
+				service: 'api-gateway'
+			}
+		},
+		telegram: {
+			botToken: process.env.TELEGRAM_BOT_TOKEN!,
+			chatId: parseInt(process.env.TELEGRAM_CHAT_ID!),
+			opts: {
+				level: 'error',
+				template: '[{level}] {service}: {message}',
+				disableNotification: true
+			}
+		}
+	}
 })
 ```
 
@@ -310,17 +383,17 @@ const logger = createLogger({
 import { format } from 'winston'
 
 const customFormat = format.printf(({ timestamp, level, message, service }) => {
-  return `${timestamp} | ${level.toUpperCase()} | ${service} | ${message}`
+	return `${timestamp} | ${level.toUpperCase()} | ${service} | ${message}`
 })
 
 const logger = createLogger({
-  serviceName: 'custom-service',
-  transports: {
-    console: {
-      type: 'detailed',
-      customFormat
-    }
-  }
+	serviceName: 'custom-service',
+	transports: {
+		console: {
+			type: 'detailed',
+			customFormat
+		}
+	}
 })
 ```
 
@@ -328,27 +401,30 @@ const logger = createLogger({
 
 ```typescript
 const logger = createLogger({
-  serviceName: 'error-prone-service',
-  transports: {
-    console: { type: 'detailed' },
-    telegram: {
-      botToken: 'YOUR_BOT_TOKEN',
-      chatId: -1001234567890,
-      opts: {
-        level: 'error',
-        handleExceptions: true
-      }
-    }
-  }
+	serviceName: 'error-prone-service',
+	transports: {
+		console: { type: 'detailed' },
+		telegram: {
+			botToken: 'YOUR_BOT_TOKEN',
+			chatId: -1001234567890,
+			opts: {
+				level: 'error',
+				handleExceptions: true
+			}
+		}
+	}
 })
 
 // Automatically handles uncaught exceptions and rejections
-process.on('uncaughtException', (error) => {
-  logger.critical('Uncaught Exception', { error: error.message, stack: error.stack })
+process.on('uncaughtException', error => {
+	logger.critical('Uncaught Exception', {
+		error: error.message,
+		stack: error.stack
+	})
 })
 
-process.on('unhandledRejection', (reason) => {
-  logger.critical('Unhandled Rejection', { reason })
+process.on('unhandledRejection', reason => {
+	logger.critical('Unhandled Rejection', { reason })
 })
 ```
 
@@ -356,14 +432,14 @@ process.on('unhandledRejection', (reason) => {
 
 The logger supports 6 default log levels with corresponding colors:
 
-| Level | Priority | Color | Description |
-|-------|----------|-------|-------------|
-| `critical` | 0 | Magenta | System failures, immediate attention required |
-| `error` | 1 | Red | Error conditions, functionality affected |
-| `warn` | 2 | Yellow | Warning conditions, potential issues |
-| `success` | 3 | Green | Successful operations, positive outcomes |
-| `info` | 4 | Cyan | General information, normal operations |
-| `debug` | 5 | Gray | Detailed debugging information |
+| Level      | Priority | Color   | Description                                   |
+| ---------- | -------- | ------- | --------------------------------------------- |
+| `critical` | 0        | Magenta | System failures, immediate attention required |
+| `error`    | 1        | Red     | Error conditions, functionality affected      |
+| `warn`     | 2        | Yellow  | Warning conditions, potential issues          |
+| `success`  | 3        | Green   | Successful operations, positive outcomes      |
+| `info`     | 4        | Cyan    | General information, normal operations        |
+| `debug`    | 5        | Gray    | Detailed debugging information                |
 
 ### Custom Log Levels
 
@@ -374,32 +450,32 @@ import { createLogger, createTypedLogger } from 'omnilogs'
 
 // Option 1: Using createLogger (flexible typing)
 const logger = createLogger({
-  serviceName: 'custom-service',
-  transports: {
-    console: { type: 'detailed' }
-  },
-  colorLevels: {
-    levels: {
-      emergency: 0,
-      alert: 1,
-      critical: 2,
-      error: 3,
-      warning: 4,
-      notice: 5,
-      info: 6,
-      debug: 7
-    },
-    colors: {
-      emergency: 'red',
-      alert: 'magenta',
-      critical: 'red',
-      error: 'red',
-      warning: 'yellow',
-      notice: 'blue',
-      info: 'green',
-      debug: 'gray'
-    }
-  }
+	serviceName: 'custom-service',
+	transports: {
+		console: { type: 'detailed' }
+	},
+	colorLevels: {
+		levels: {
+			emergency: 0,
+			alert: 1,
+			critical: 2,
+			error: 3,
+			warning: 4,
+			notice: 5,
+			info: 6,
+			debug: 7
+		},
+		colors: {
+			emergency: 'red',
+			alert: 'magenta',
+			critical: 'red',
+			error: 'red',
+			warning: 'yellow',
+			notice: 'blue',
+			info: 'green',
+			debug: 'gray'
+		}
+	}
 })
 
 // These methods will be available with TypeScript intellisense
@@ -409,34 +485,34 @@ logger.notice('General notice')
 
 // Option 2: Using createTypedLogger (strict typing)
 type MyCustomLevels = {
-  fatal: number
-  error: number
-  warn: number
-  info: number
-  verbose: number
+	fatal: number
+	error: number
+	warn: number
+	info: number
+	verbose: number
 }
 
 const strictLogger = createTypedLogger<MyCustomLevels>({
-  serviceName: 'strict-service',
-  transports: {
-    console: { type: 'detailed' }
-  },
-  colorLevels: {
-    levels: {
-      fatal: 0,
-      error: 1,
-      warn: 2,
-      info: 3,
-      verbose: 4
-    },
-    colors: {
-      fatal: 'red',
-      error: 'red',
-      warn: 'yellow',
-      info: 'green',
-      verbose: 'gray'
-    }
-  }
+	serviceName: 'strict-service',
+	transports: {
+		console: { type: 'detailed' }
+	},
+	colorLevels: {
+		levels: {
+			fatal: 0,
+			error: 1,
+			warn: 2,
+			info: 3,
+			verbose: 4
+		},
+		colors: {
+			fatal: 'red',
+			error: 'red',
+			warn: 'yellow',
+			info: 'green',
+			verbose: 'gray'
+		}
+	}
 })
 
 // Strongly typed methods with full intellisense
@@ -447,12 +523,12 @@ strictLogger.verbose('Detailed verbose information')
 #### Type Exports for Custom Levels
 
 ```typescript
-import { 
-  createLogger, 
-  createTypedLogger,
-  type LoggerWithLevels,
-  type FlexibleLogger,
-  type CustomLogger 
+import {
+	createLogger,
+	createTypedLogger,
+	type LoggerWithLevels,
+	type FlexibleLogger,
+	type CustomLogger
 } from 'omnilogs'
 
 // LoggerWithLevels<T> - For strict typing with custom levels
@@ -477,18 +553,18 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const logger = createLogger({
-  serviceName: 'secure-app',
-  transports: {
-    telegram: {
-      botToken: process.env.TELEGRAM_BOT_TOKEN!,
-      chatId: parseInt(process.env.TELEGRAM_CHAT_ID!),
-      opts: { level: 'error' }
-    },
-    loki: {
-      host: process.env.LOKI_HOST!,
-      basicAuth: process.env.LOKI_BASIC_AUTH
-    }
-  }
+	serviceName: 'secure-app',
+	transports: {
+		telegram: {
+			botToken: process.env.TELEGRAM_BOT_TOKEN!,
+			chatId: parseInt(process.env.TELEGRAM_CHAT_ID!),
+			opts: { level: 'error' }
+		},
+		loki: {
+			host: process.env.LOKI_HOST!,
+			basicAuth: process.env.LOKI_BASIC_AUTH
+		}
+	}
 })
 ```
 
@@ -519,20 +595,20 @@ npm run dev
 The package includes full TypeScript definitions. All interfaces and types are exported for your convenience:
 
 ```typescript
-import { 
-  createLogger, 
-  type LoggerOptions,
-  type LokiTransportOptions,
-  type TelegramTransportOptions 
+import {
+	createLogger,
+	type LoggerOptions,
+	type LokiTransportOptions,
+	type TelegramTransportOptions
 } from 'omnilogs'
 
 // Full type safety
 const config: LoggerOptions = {
-  serviceName: 'typed-service',
-  level: 'info',
-  transports: {
-    console: { type: 'detailed' }
-  }
+	serviceName: 'typed-service',
+	level: 'info',
+	transports: {
+		console: { type: 'detailed' }
+	}
 }
 
 const logger = createLogger(config)
