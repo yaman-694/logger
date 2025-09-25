@@ -1,3 +1,5 @@
+
+import type { DailyRotateFileTransportOptions } from 'winston-daily-rotate-file'
 import { ColorLevels } from "../interface/interfaces"
 
 const levelColor: ColorLevels = {

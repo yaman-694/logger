@@ -122,6 +122,58 @@ interface LoggerOptions {
 
 ## Transport Configuration
 
+
+### File Transport (Daily Rotate)
+
+```typescript
+interface FileTransport {
+  maxSize?: string | number // Maximum size of a log file before rotation (e.g., '20m')
+  maxFiles?: string | number // Maximum number of files or days to keep (e.g., '14d')
+  level?: string // Minimum log level to write to file (default: 'info')
+  customFormat?: Format // Optional custom winston format
+  formatType?: 'detailed' | 'json' | 'compact' // Output format type (default: 'detailed')
+}
+```
+
+#### File Transport Features
+- **Automatic log rotation**: Rotates log files based on size or date
+- **Customizable retention**: Keep logs for a set number of days or files
+- **Multiple formats**: Supports detailed, compact, and JSON log formats
+- **Production ready**: Uses [winston-daily-rotate-file](https://github.com/winstonjs/winston-daily-rotate-file)
+
+#### Example Configuration
+```typescript
+import { createLogger } from 'omnilogs'
+
+const logger = createLogger({
+  serviceName: 'default-service',
+  transports: {
+    fileRotate: {
+      maxSize: '20m',
+      maxFiles: '1d',
+      level: 'info',
+      // formatType: 'json', // optional: 'detailed' | 'compact' | 'json'
+      // customFormat: myCustomFormat // optional: winston format
+    }
+  }
+})
+
+logger.error('This is an error message', { errorCode: 123, user: 'john_doe' })
+logger.info('This is an info message')
+logger.debug('This is a debug message')
+logger.warn('This is a warning message')
+logger.critical('This is a critical message')
+logger.success('This is a success message')
+```
+
+#### File Output Example
+```
+2025-09-24 18:18:09 info [DEFAULT-SERVICE] → This is an info message
+2025-09-24 18:18:09 error [DEFAULT-SERVICE] → This is an error message | errorCode: 123 | user: john_doe
+```
+
+---
+
 ### Console Transport
 
 ```typescript
@@ -190,7 +242,7 @@ const logger = createLogger({
   transports: {
     loki: {
       host: 'http://localhost:3100',
-      labels: { 
+      labels: {
         environment: 'production',
         version: '1.0.0'
       },
@@ -447,12 +499,12 @@ strictLogger.verbose('Detailed verbose information')
 #### Type Exports for Custom Levels
 
 ```typescript
-import { 
-  createLogger, 
+import {
+  createLogger,
   createTypedLogger,
   type LoggerWithLevels,
   type FlexibleLogger,
-  type CustomLogger 
+  type CustomLogger
 } from 'omnilogs'
 
 // LoggerWithLevels<T> - For strict typing with custom levels
@@ -519,11 +571,11 @@ npm run dev
 The package includes full TypeScript definitions. All interfaces and types are exported for your convenience:
 
 ```typescript
-import { 
-  createLogger, 
+import {
+  createLogger,
   type LoggerOptions,
   type LokiTransportOptions,
-  type TelegramTransportOptions 
+  type TelegramTransportOptions
 } from 'omnilogs'
 
 // Full type safety

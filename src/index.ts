@@ -41,6 +41,10 @@ const createLogger = ({
     transporters.push(transporter.consoleTransporter(type, customFormat))
   }
 
+  if (transports?.fileRotate) {
+    transporters.push(transporter.fileRotateTransporter(transports.fileRotate))
+  }
+
   loggerConfig.transports = transporters
   loggerConfig.exceptionHandlers = transporters
   loggerConfig.rejectionHandlers = transporters
@@ -51,9 +55,9 @@ const createLogger = ({
 }
 
 export type {
-  CustomLogger,
-  FlexibleLogger,
-  LoggerWithLevels
+	CustomLogger,
+	FlexibleLogger,
+	LoggerWithLevels
 } from './interface/interfaces.js'
 export { createLogger }
 
